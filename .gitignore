@@ -3,7 +3,9 @@
 
 # Unignore all with extensions
 !*.*
-
+!*.c
+!*.h
+!Makefile
 # Unignore all dirs
 !*/
 
