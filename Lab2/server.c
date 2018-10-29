@@ -26,6 +26,9 @@
 #define SERVER_KEY "bob.pem"
 #define SERVER_PWD "password"
 
+// Testcase
+// #define SERVER_KEY "./testCert/testBobCert.pem"
+
 // Configuration
 // testcase
 // #define CIPHER_LIST "SSLv2"
@@ -136,6 +139,7 @@ int main(int argc, char **argv)
 
   SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, 0);
 
+  bio_err = BIO_new_fp(stderr, BIO_NOCLOSE);
 
   sock = tcp_setup(port);
 
@@ -168,7 +172,10 @@ int main(int argc, char **argv)
       
       if (SSL_accept(ssl) <= 0) {
 	close(s);
-        berr_exit(FMT_ACCEPT_ERR);
+        
+        BIO_printf(bio_err, "%s", FMT_ACCEPT_ERR);
+	ERR_print_errors(bio_err);
+        goto shutdown;
       }
 
       certif_check(ssl);
@@ -180,9 +187,9 @@ int main(int argc, char **argv)
 	      close(sock);
 	      close(s);
 	      return 0;
-	*/
-
-
+*/
+     
+	
 
       //read_and_write();
       r = SSL_read(ssl, buf, 256);
@@ -203,10 +210,8 @@ int main(int argc, char **argv)
       printf(FMT_OUTPUT, buf, answer);	
  
 
-
       r= SSL_write(ssl, answer, strlen(answer));
 	
-
       shutdown:
       r =  SSL_shutdown(ssl);
       switch(r) {

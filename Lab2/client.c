@@ -25,7 +25,10 @@
 
 
 /* Configuration Define and Setting Variable*/
-#define KEY_FILE_PATH "alice.pem"
+// #define KEY_FILE_PATH "alice.pem"
+
+#define KEY_FILE_PATH "./testCert/testAliceCert.pem"
+
 #define CLIENT_PASSWORD "password"
 #define SERVER_CERT_EMAIL "ece568bob@ecf.utoronto.ca"
 #define SERVER_CN "Bob's Server"
@@ -87,8 +90,6 @@ int tcp_connect(char* host, int port){
 void check_cert(SSL* ssl, char* host) {
     X509 *peer;
     char peer_CN[256];
-    if(SSL_get_verify_result(ssl)!=X509_V_OK)
-      berr_exit("Certificate doesn't verify");
 
     /*Check the cert chain. The chain length
       is automatically checked by OpenSSL when
@@ -96,13 +97,11 @@ void check_cert(SSL* ssl, char* host) {
 
     /*Check the common name*/
     peer=SSL_get_peer_certificate(ssl);
-    X509_NAME_get_text_by_NID
-      (X509_get_subject_name(peer),
-      NID_commonName, peer_CN, 256);
+    X509_NAME_get_text_by_NID(X509_get_subject_name(peer), NID_commonName, peer_CN, 256);
 
-
-
-
+    if(SSL_get_verify_result(ssl)!=X509_V_OK)
+      berr_exit("Certificate doesn't verify");
+      
     if ((peer == NULL) || (SSL_get_verify_result(ssl) != X509_V_OK)){
       printf(FMT_NO_VERIFY);
       return -1;
@@ -125,14 +124,11 @@ void check_cert(SSL* ssl, char* host) {
       exit(0);
     }
 
-
     if(strcasecmp(peer_email, SERVER_CERT_EMAIL))
-    err_exit
-      (FMT_EMAIL_MISMATCH);
+      err_exit(FMT_EMAIL_MISMATCH);
 
     if(strcasecmp(peer_CN, SERVER_CN))
-    err_exit
-      (FMT_CN_MISMATCH);
+      err_exit(FMT_CN_MISMATCH);
     
 
     //printf("%s\n",peer_certi_issuer);
@@ -156,14 +152,14 @@ static int request_and_response(SSL *ssl, char *req, char *buf){
 
     r = SSL_write(ssl,req,request_len);
 
-    
+
     switch(SSL_get_error(ssl,r)){      
       case SSL_ERROR_NONE:
         if(request_len!=r)
-          err_exit("Incomplete write!");
+          err_exit("Incomplete Write");
         break;
       default:
-          berr_exit("SSL write problem");
+          berr_exit("SSL Write Error");
     }
 
 
@@ -173,11 +169,13 @@ static int request_and_response(SSL *ssl, char *req, char *buf){
 
     while(1){
       r=SSL_read(ssl,buf,BUFSIZZ);
-      printf("%d \n", r);
+      //printf("%d \n", r);
+
+
       switch(SSL_get_error(ssl,r)){
         case SSL_ERROR_NONE:
           len=r;
-	  printf("SSL_ERROR_NONE");
+	  //printf("SSL_ERROR_NONE");
           break;
         case SSL_ERROR_ZERO_RETURN:
           goto shutdown;
@@ -253,10 +251,9 @@ int main(int argc, char **argv)
   // Use SSLv3 or TSLv1. No SSLv2
   SSL_CTX_set_options(ctx, SSL_OP_NO_SSLv2);
   // Use SHA1 only for cipher
-  //SSL_CTX_set_cipher_list(ctx, "SHA1");
+  SSL_CTX_set_cipher_list(ctx, "SHA1");
   // test case
-
-  SSL_CTX_set_cipher_list(ctx, "AES256");
+  //SSL_CTX_set_cipher_list(ctx, "AES256");
 
   // build a new SSL connection and attach the BIO object for stdin or stdout
   SSL *ssl;
@@ -266,8 +263,9 @@ int main(int argc, char **argv)
   sbio = BIO_new_socket(sock,BIO_NOCLOSE);
   SSL_set_bio(ssl,sbio,sbio);
 
-
+  //printf("%d \n", SSL_connect(ssl) );
   if (SSL_connect(ssl) <= 0) {
+    //printf("%d \n", SSL_connect(ssl) );
     // printf(FMT_CONNECT_ERR);
     berr_exit(FMT_CONNECT_ERR);
     //err_exit(FMT_CONNECT_ERR);

@@ -21,7 +21,10 @@
 
 
 #define HOST	"localhost"
-#define CA_LIST "568ca.pem"
+//#define CA_LIST "568ca.pem"
+// Test case
+#define CA_LIST "./testCert/testCert.pem"
+
 #define PASSWORD "password"
 #define BUFSIZE 256
 #define PORT	8765

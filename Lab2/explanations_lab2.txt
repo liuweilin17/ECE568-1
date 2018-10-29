@@ -1,10 +1,10 @@
 #Haotian Yin, 1000669573, haotian.yin@mail.utoronto.ca
+#Baiwu Zhang, 1001127540, baiwu.zhang@mail.utoronto.ca
 
 
+Server:
+Firstly, it will build a SSL context object. We will initialize it with the server's key and password and configurate the server. Then we set the Key, CA, verifying option, cipher list and verification mode. Next, we will create a TCP connection with handshakes. Every client connect to the server, a child process on server side will be forked to handle each client requests. After that, we will check the certification of the SSL information. If the certicication is verified, we will show the client informations. Otherwise, we will handle the errors such as not-support-protocol, invalid certicication and etc..
 
+Client:
+Firstly, it initialize a SSL context object, and set a proper key, configuration. Then we will build a TCP connection to server and handshake with email and CN. Also, it will handle the different error such as the mismatch of email or CN. Client side has similar process as Server side. After cliend send a resquest and get a response, it will be terminated.
 
-// chongxie
-
-
-For the server, create a context object followed by initializing and configuring it to hold the configuration of the server. This is done to secure an SSL. This will set the appropriate key, certificate, CA location, supported cipher suite and verification mode. We then create a TCP socket that listens for connections. Whenever a new connection is accepted, a child process is forked which handles the client requests. The child processes the SSL handshake and reports error if the client fails to provide a certificate or if the certificate is invalid. If the certificate is verified, we display the client's details and start handling the client request. If the SSL read or write is interrupted prematurely (eg: client is closed), an error message is reported. Once the client's message is received and replied to, the SSL socket is terminated by SSL_shutdown.
-The Client initialization is similar to the server’s one. Once the appropriate key, certificate, desired cipher suite and protocol are set, a TCP connection is initiated to the server. Then it proceeds to initiate the SSL handshake followed by verification of the server’s certificate, common name and email address. If either of these parameters don’t match, a corresponding error is displayed. If the SSL read or write is interrupted prematurely (eg: client is closed), an error message is reported. Once the client sends its request and then receives a response from the server, the SSL socket is terminated by SSL_shutdown.
