@@ -27,7 +27,11 @@
 #define SERVER_PWD "password"
 
 // Configuration
+// testcase
+// #define CIPHER_LIST "SSLv2"
+
 #define CIPHER_LIST "SSLv2:SSLv3:TLSv1"
+
 
 
 // fcn Declaration
@@ -200,7 +204,7 @@ int main(int argc, char **argv)
  
 
 
-      r= SSL_write(ssl, "55", strlen("55"));
+      r= SSL_write(ssl, answer, strlen(answer));
 	
 
       shutdown:

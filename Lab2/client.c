@@ -25,8 +25,8 @@
 
 
 /* Configuration Define and Setting Variable*/
-#define KEY_FILE_PATH "bob.pem"
-#define CLIENT_PASSWORD "passworddd"
+#define KEY_FILE_PATH "alice.pem"
+#define CLIENT_PASSWORD "password"
 #define SERVER_CERT_EMAIL "ece568bob@ecf.utoronto.ca"
 #define SERVER_CN "Bob's Server"
 #define BUFSIZZ 256
@@ -125,7 +125,7 @@ void check_cert(SSL* ssl, char* host) {
       exit(0);
     }
 
-	
+
     if(strcasecmp(peer_email, SERVER_CERT_EMAIL))
     err_exit
       (FMT_EMAIL_MISMATCH);
@@ -135,14 +135,7 @@ void check_cert(SSL* ssl, char* host) {
       (FMT_CN_MISMATCH);
     
 
-    printf("??%s\n",peer_certi_issuer);
-
-
-    if(peer_certi_issuer == NULL){
-	printf("??%s\n",peer_certi_issuer);
-    }
-    
-    
+    //printf("%s\n",peer_certi_issuer);
 
     printf(FMT_SERVER_INFO, peer_CN, peer_email, peer_certi_issuer);
 
@@ -260,7 +253,10 @@ int main(int argc, char **argv)
   // Use SSLv3 or TSLv1. No SSLv2
   SSL_CTX_set_options(ctx, SSL_OP_NO_SSLv2);
   // Use SHA1 only for cipher
-  SSL_CTX_set_cipher_list(ctx, "SHA1");
+  //SSL_CTX_set_cipher_list(ctx, "SHA1");
+  // test case
+
+  SSL_CTX_set_cipher_list(ctx, "AES256");
 
   // build a new SSL connection and attach the BIO object for stdin or stdout
   SSL *ssl;
