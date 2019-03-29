@@ -1,0 +1,15 @@
+
+ 
+
+Part 1 Explanation : 
+
+Run 'dig utoronto.ca' and 'dig utoronto.ca MX' to figure out the IPv4 for utoronto.ca, name server of utoronto.ca and mail server of utoronto.ca.
+
+Part 2 Explanation:
+I created a socket where it takes in a DNS query and send it to the BIND server. When reveived a response back, it will send it back to the place where the query comes from.
+
+Part 3 Explanation:
+Same as part 2, except when received a response from BIND server, modify it rdada field of ns to 'ns.dnslabattacker.net' so that it is comrpisised.
+
+Part 4 Explanation: 
+In this part, I first acquired a legit DNS response for example.com. Then I modified the an.rdata to be '1.2.3.4', ns.rdata to be "ns.dnslabattacker.net". Then I started an infinite loop. In the loop, I first constructed random domain name using the given function, and assigned it to be the qname for both the dnsPacket and the response packet. AFter that, I sent the dnsPacket to the external DNS server using Bind server to acquire the DNS for that random domain. Before the DNS replied, I used another loop to send 50 responce packets to the Bind server each with a random id. I expected the random id would match the id of the packet sent by the Bind server to the external world. Once the ttwo id matches, the Bind will replace the cache entry of 'example.com' to be the poisoned one with '1.2.3.4' and "ns.dnslabattacker.net". If it done so, the attack was successfully. I have another function to send a normal request to the Bind server to acquire the saved address of 'example.com', if it is '1.2.3.4', it prints 'success' to indicate a successfully attack. 
